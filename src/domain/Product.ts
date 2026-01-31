@@ -35,7 +35,7 @@ export class Product {
   }
 
   getPackagingOptions(): PackagingOption[] {
-    return this.packagingOptions;
+    return [...this.packagingOptions];
   }
 
   addPackagingOption(quantity: number, price: number): void {
