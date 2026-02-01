@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { ProductRepository } from "../../src/repository/ProductRepository";
+import { Product } from "../../src/domain/Product";
 
 describe('InMemoryProductRepository', () => {
   let repo: ProductRepository;
@@ -9,16 +10,64 @@ describe('InMemoryProductRepository', () => {
   });
   
   describe('add (create) products', () => {
+    it('should support adding products to the repository', () => {
+      const product = new Product('CE', 'Cheese', 5.99);
+      expect(() => repo.addProduct(product)).not.toThrow();
+    });
+    it ('should not allow adding duplicate products', () => {
+      const product = new Product('CE', 'Cheese', 5.99);
+      repo.addProduct(product);
+      expect(() => repo.addProduct(product)).toThrowError(`Product with code CE already exists.`);
+    });
+  });
+  describe('retrieve products', () => {    
     it('should return null for non-existent product', () => {
       const product = repo.findByCode('INVALID_CODE');
       expect(product).toBeNull();
     });
     it('should find product by code', () => {
-      const repo = new ProductRepository();
-      const product = repo.findByCode('CE');
+      const product = new Product('CE', 'Cheese', 5.99);
+      repo.addProduct(product);
+      const foundProduct = repo.findByCode('CE');
       
-      expect(product).not.toBeNull();
-      expect(product?.name).toBe('Cheese');
+      expect(foundProduct).not.toBeNull();
+      expect(foundProduct?.name).toBe('Cheese');
     });
   });
+  describe('update products', () => {
+    it('should not allow updating non-existent products', () => {
+      const product = new Product('CE', 'Prime Cheese', 15.99);
+      expect(() => repo.updateProduct(product)).toThrowError(`Product with code CE does not exist.`);
+    });it('should update existing product', () => {
+      const cheese = new Product('CE', 'Cheese', 5.95);
+      cheese.addPackagingOption(3, 14.95);
+      repo.addProduct(cheese);
+      
+      // Create updated version
+      const updatedCheese = new Product('CE', 'Premium Cheese', 7.95);
+      updatedCheese.addPackagingOption(5, 30.00);
+      
+      repo.updateProduct(updatedCheese);
+      const found = repo.findByCode('CE');
+      
+      expect(found?.name).toBe('Premium Cheese');
+      expect(found?.price).toBe(7.95);
+      expect(found?.getPackagingOptions()).toHaveLength(1);
+      expect(found?.getPackagingOptions()[0].price).toBe(30.00);
+    });
+  });
+  describe('delete', () => {
+    it('should delete existing product', () => {
+      const cheese = new Product('CE', 'Cheese', 5.95);
+      repo.addProduct(cheese);
+      
+      repo.deleteProduct('CE');
+      const found = repo.findByCode('CE');
+      
+      expect(found).toBeNull();
+    });
+    it('should not throw error when deleting non-existent product', () => {
+      expect(() => repo.deleteProduct('INVALID')).not.toThrow();
+    });
+  });  
 });
