@@ -66,8 +66,23 @@ export class PackageOptimizer {
                     packageBreakdown: breakdown
                 };
             }
+            if (remainingQuantity < packagingOptions[packagingOptions.length - 1].quantity) {
+                const costForSingles = remainingQuantity * product.price;
+                breakdown.push({
+                    packageSize: 1,
+                    noOfPackages: remainingQuantity,
+                    totalCost: costForSingles
+                });
+                totalCost += costForSingles;
+                remainingQuantity = 0;
+                return {
+                    totalCost,
+                    totalPackages: breakdown.reduce((sum, item) => sum + item.noOfPackages, 0),
+                    packageBreakdown: breakdown
+                };
+            }
         }
-        throw new Error('Optimization not fully implemented');
+        throw new Error('Logic error: should have fulfilled the order by now!');
     }
 }
 
