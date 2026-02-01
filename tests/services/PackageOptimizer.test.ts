@@ -74,4 +74,31 @@ describe('PackageOptimizer', () => {
     expect(order?.packageBreakdown.length).toBe(1);
     expect(order?.packageBreakdown[0]).toEqual({ packageSize: 5, noOfPackages: 2, totalCost: 41.9 });
   });
+  it('should optimize for mixed packaging sizes for product with packaging options', () => {
+    const product = new Product('CE', 'Cheese', 5.95);
+    product.addPackagingOption(3, 14.95);
+    product.addPackagingOption(5, 20.95);
+
+    const order = optimizer.optimize(product, 13);
+
+    expect(order?.totalCost).toBe(20.95 * 2 + 14.95);
+    expect(order?.totalPackages).toBe(3);
+    expect(order?.packageBreakdown.length).toBe(2);
+    expect(order?.packageBreakdown).toContainEqual({ packageSize: 5, noOfPackages: 2, totalCost: 41.9 });
+    expect(order?.packageBreakdown).toContainEqual({ packageSize: 3, noOfPackages: 1, totalCost: 14.95 });
+  });
+  it('should optimize for complex packaging sizes for product with packaging options', () => {
+    const product = new Product('CE', 'Cheese', 5.95);
+    product.addPackagingOption(3, 14.95);
+    product.addPackagingOption(5, 20.95);
+
+    const order = optimizer.optimize(product, 14);
+
+    expect(order?.totalCost).toBe(20.95 * 2 + 14.95 + 5.95);
+    expect(order?.totalPackages).toBe(4);
+    expect(order?.packageBreakdown.length).toBe(3);
+    expect(order?.packageBreakdown).toContainEqual({ packageSize: 5, noOfPackages: 2, totalCost: 41.9 });
+    expect(order?.packageBreakdown).toContainEqual({ packageSize: 3, noOfPackages: 1, totalCost: 14.95 });
+    expect(order?.packageBreakdown).toContainEqual({ packageSize: 1, noOfPackages: 1, totalCost: 5.95 });
+  });
 });
