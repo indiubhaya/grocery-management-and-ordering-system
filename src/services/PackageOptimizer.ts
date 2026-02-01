@@ -6,7 +6,7 @@ export interface PackageArrangement {
     totalCost: number;
 }
 
-export interface OptimizedOrder {
+export interface PackagingResult {
     totalCost: number;
     totalPackages: number;
     packageBreakdown: PackageArrangement[];
@@ -14,7 +14,7 @@ export interface OptimizedOrder {
 
 export class PackageOptimizer {
 
-    optimize(product: Product, orderQuantity: number): OptimizedOrder {
+    optimize(product: Product, orderQuantity: number): PackagingResult {
         // Negative quantities are handled here
         validateQuantity(orderQuantity);
         
