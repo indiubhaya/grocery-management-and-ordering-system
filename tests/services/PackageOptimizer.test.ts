@@ -62,4 +62,16 @@ describe('PackageOptimizer', () => {
     expect(order?.packageBreakdown.length).toBe(1);
     expect(order?.packageBreakdown[0]).toEqual({ packageSize: 1, noOfPackages: 2, totalCost: 11.9 });
   });
+  it('should optimize packaging of largest package size for product with packaging options', () => {
+    const product = new Product('CE', 'Cheese', 5.95);
+    product.addPackagingOption(3, 14.95);
+    product.addPackagingOption(5, 20.95);
+
+    const order = optimizer.optimize(product, 10);
+
+    expect(order?.totalCost).toBe(41.9);
+    expect(order?.totalPackages).toBe(2);
+    expect(order?.packageBreakdown.length).toBe(1);
+    expect(order?.packageBreakdown[0]).toEqual({ packageSize: 5, noOfPackages: 2, totalCost: 41.9 });
+  });
 });
