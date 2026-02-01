@@ -62,7 +62,7 @@ describe('Product', () => {
       product.addPackagingOption(3, 14.95);
       const options = product.getPackagingOptions();
       expect(options).toHaveLength(1);
-      expect(options[0]).toEqual({ amount: 3, price: 14.95 });
+      expect(options[0]).toEqual({ quantity: 3, price: 14.95 });
     });
 
     it("should be possible to add multiple packaging options", () => {
@@ -73,22 +73,22 @@ describe('Product', () => {
 
       const options = product.getPackagingOptions();
       expect(options).toHaveLength(2);
-      expect(options[0]).toEqual({ amount: 3, price: 14.95 });
-      expect(options[1]).toEqual({ amount: 5, price: 20.95 });
+      expect(options[0]).toEqual({ quantity: 3, price: 14.95 });
+      expect(options[1]).toEqual({ quantity: 5, price: 20.95 });
     });
 
-    it('should fail packaging with zero items', () => {
+    it('should fail packaging with zero quantity', () => {
       const product = new Product('CE', 'Cheese', 5.95);
       
       expect(() => product.addPackagingOption(0, 10.00))
-        .toThrow('Package amount must be positive');
+        .toThrow('Package quantity must be positive');
     });
 
-    it('should fail packaging with negative amount', () => {
+    it('should fail packaging with negative quantity', () => {
       const product = new Product('CE', 'Cheese', 5.95);
       
       expect(() => product.addPackagingOption(-5, 10.00))
-        .toThrow('Package amount must be positive');
+        .toThrow('Package quantity must be positive');
     });
 
     it('should fail packaging with zero price', () => {

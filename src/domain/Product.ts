@@ -1,5 +1,5 @@
 export interface PackagingOption {
-  amount: number;
+  quantity: number;
   price: number;
 }
 
@@ -41,12 +41,12 @@ export class Product {
   addPackagingOption(quantity: number, price: number): void {
     this.validatePrice(price);
     this.validateQuantity(quantity);
-    this.packagingOptions.push({ amount: quantity, price: price });
+    this.packagingOptions.push({ quantity: quantity, price: price });
   }
 
   validateQuantity(quantity: number) {
     if (quantity <= 0) {
-      throw new Error('Package amount must be positive');
+      throw new Error('Package quantity must be positive');
     }
   }
 }
