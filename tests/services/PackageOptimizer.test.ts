@@ -36,7 +36,7 @@ describe('PackageOptimizer', () => {
     expect(order?.totalCost).toBe(119.5);
     expect(order?.totalPackages).toBe(10);
     expect(order?.packageBreakdown.length).toBe(1);
-    expect(order?.packageBreakdown[0]).toEqual({ packageSize: 1, noOfPackages: 10, totalCost: 119.5 });
+    expect(order?.packageBreakdown[0]).toEqual({ packageSize: 1, noOfPackages: 10, totalCost: 11.95 * 10 });
   });
   it('should handle a single item of product with packaging options', () => {
     const product = new Product('CE', 'Cheese', 5.95);
@@ -60,7 +60,7 @@ describe('PackageOptimizer', () => {
     expect(order?.totalCost).toBe(11.9);
     expect(order?.totalPackages).toBe(2);
     expect(order?.packageBreakdown.length).toBe(1);
-    expect(order?.packageBreakdown[0]).toEqual({ packageSize: 1, noOfPackages: 2, totalCost: 11.9 });
+    expect(order?.packageBreakdown[0]).toEqual({ packageSize: 1, noOfPackages: 2, totalCost: 5.95 * 2 });
   });
   it('should optimize packaging of largest package size for product with packaging options', () => {
     const product = new Product('CE', 'Cheese', 5.95);
@@ -72,7 +72,7 @@ describe('PackageOptimizer', () => {
     expect(order?.totalCost).toBe(41.9);
     expect(order?.totalPackages).toBe(2);
     expect(order?.packageBreakdown.length).toBe(1);
-    expect(order?.packageBreakdown[0]).toEqual({ packageSize: 5, noOfPackages: 2, totalCost: 41.9 });
+    expect(order?.packageBreakdown[0]).toEqual({ packageSize: 5, noOfPackages: 2, totalCost: 20.95 * 2 });
   });
   it('should optimize for mixed packaging sizes for product with packaging options', () => {
     const product = new Product('CE', 'Cheese', 5.95);
@@ -84,10 +84,10 @@ describe('PackageOptimizer', () => {
     expect(order?.totalCost).toBe(20.95 * 2 + 14.95);
     expect(order?.totalPackages).toBe(3);
     expect(order?.packageBreakdown.length).toBe(2);
-    expect(order?.packageBreakdown).toContainEqual({ packageSize: 5, noOfPackages: 2, totalCost: 41.9 });
+    expect(order?.packageBreakdown).toContainEqual({ packageSize: 5, noOfPackages: 2, totalCost: 20.95 * 2 });
     expect(order?.packageBreakdown).toContainEqual({ packageSize: 3, noOfPackages: 1, totalCost: 14.95 });
   });
-  it('should optimize for complex packaging sizes for product with packaging options', () => {
+  it('should optimize for complex packaging sizes for product with packaging options - example 1', () => {
     const product = new Product('CE', 'Cheese', 5.95);
     product.addPackagingOption(3, 14.95);
     product.addPackagingOption(5, 20.95);
@@ -97,8 +97,23 @@ describe('PackageOptimizer', () => {
     expect(order?.totalCost).toBe(20.95 * 2 + 14.95 + 5.95);
     expect(order?.totalPackages).toBe(4);
     expect(order?.packageBreakdown.length).toBe(3);
-    expect(order?.packageBreakdown).toContainEqual({ packageSize: 5, noOfPackages: 2, totalCost: 41.9 });
+    expect(order?.packageBreakdown).toContainEqual({ packageSize: 5, noOfPackages: 2, totalCost: 20.95 * 2 });
     expect(order?.packageBreakdown).toContainEqual({ packageSize: 3, noOfPackages: 1, totalCost: 14.95 });
     expect(order?.packageBreakdown).toContainEqual({ packageSize: 1, noOfPackages: 1, totalCost: 5.95 });
+  });
+  it('should optimize for complex packaging sizes for product with packaging options - example 2', () => {
+    const product = new Product('HM', 'Ham', 7.95);
+    product.addPackagingOption(2, 13.95);
+    product.addPackagingOption(5, 29.95);
+    product.addPackagingOption(8, 40.95);
+
+    const order = optimizer.optimize(product, 15);
+
+    expect(order?.totalCost).toBe(40.95 + 29.95 + 13.95);
+    expect(order?.totalPackages).toBe(3);
+    expect(order?.packageBreakdown.length).toBe(3);
+    expect(order?.packageBreakdown).toContainEqual({ packageSize: 8, noOfPackages: 1, totalCost: 40.95 });
+    expect(order?.packageBreakdown).toContainEqual({ packageSize: 5, noOfPackages: 1, totalCost: 29.95 });
+    expect(order?.packageBreakdown).toContainEqual({ packageSize: 2, noOfPackages: 1, totalCost: 13.95 });
   });
 });
