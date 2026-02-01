@@ -35,4 +35,33 @@ export class ProductRepository {
   deleteProduct(code: string): void {
     this.products.delete(code);
   }
+
+  /**
+   * Get all products.
+   */
+  findAll(): Product[] {
+    return Array.from(this.products.values());
+  }
+  
+  /**
+   * Seed initial products into the repository.
+   */
+  seedInitialProducts(): void {
+    // CE - Cheese
+    const cheese = new Product('CE', 'Cheese', 5.95);
+    cheese.addPackagingOption(3, 14.95);
+    cheese.addPackagingOption(5, 20.95);
+    this.products.set(cheese.code, cheese);
+
+    // HM - Ham  
+    const ham = new Product('HM', 'Ham', 7.95);
+    ham.addPackagingOption(2, 13.95);
+    ham.addPackagingOption(5, 29.95);
+    ham.addPackagingOption(8, 40.95);
+    this.products.set(ham.code, ham);
+
+    // SS - Soy Sauce
+    const soySauce = new Product('SS', 'Soy Sauce', 11.95);
+    this.products.set(soySauce.code, soySauce);
+  }
 }

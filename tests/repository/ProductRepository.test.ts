@@ -33,6 +33,23 @@ describe('InMemoryProductRepository', () => {
       expect(foundProduct).not.toBeNull();
       expect(foundProduct?.name).toBe('Cheese');
     });
+    it('should return empty array when no products exist', () => {
+      const products = repo.findAll();
+      expect(products).toEqual([]);
+    });
+    it('should return all products', () => {
+      const cheese = new Product('CE', 'Cheese', 5.95);
+      const ham = new Product('HM', 'Ham', 7.95);
+      
+      repo.addProduct(cheese);
+      repo.addProduct(ham);
+      
+      const products = repo.findAll();
+      
+      expect(products).toHaveLength(2);
+      expect(products.map(p => p.code)).toContain('CE');
+      expect(products.map(p => p.code)).toContain('HM');
+    });
   });
   describe('update products', () => {
     it('should not allow updating non-existent products', () => {
@@ -69,5 +86,17 @@ describe('InMemoryProductRepository', () => {
     it('should not throw error when deleting non-existent product', () => {
       expect(() => repo.deleteProduct('INVALID')).not.toThrow();
     });
-  });  
+  });
+  describe('seed data', () => {
+    it('should have CE, HM, SS products pre-loaded', () => {
+      const repo = new ProductRepository();
+      repo.seedInitialProducts();
+      expect(repo.findByCode('CE')).not.toBeNull();
+      expect(repo.findByCode('HM')).not.toBeNull();
+      expect(repo.findByCode('SS')).not.toBeNull();
+      
+      const allProducts = repo.findAll();
+      expect(allProducts).toHaveLength(3);
+    });
+  });
 });
