@@ -29,10 +29,11 @@ export class PackageOptimizer {
 
         // Valid orders expected beyond this point
 
-        const packagingOptions = product.getPackagingOptions().sort((a, b) => b.quantity - a.quantity);;
+        // Retrieve and sort packaging options in descending order
+        const packagingOptions = product.getPackagingOptions().sort((a, b) => b.quantity - a.quantity);
         
         // Handle single item of packaging options
-        if (packagingOptions.length === 0 || orderQuantity < packagingOptions[0].quantity) {
+        if (packagingOptions.length === 0 || orderQuantity < packagingOptions[packagingOptions.length - 1].quantity) {
             const totalCost = product.price * orderQuantity;
             return {
                 totalCost,
@@ -41,15 +42,30 @@ export class PackageOptimizer {
             };
         }
 
-        if (orderQuantity === 10) {
-            const totalCost = 20.95 * 2;
-            return {
-                totalCost,
-                totalPackages: 2,
-                packageBreakdown: [
-                    { packageSize: 5, noOfPackages: 2, totalCost: totalCost }
-                ]
-            };
+        let remainingQuantity = orderQuantity;
+        const breakdown: PackageArrangement[] = [];
+        let totalCost = 0;
+
+        for (let i = 0; i < packagingOptions.length; i++) {
+            const packagingOption = packagingOptions[i];
+            const numPackages = Math.floor(remainingQuantity / packagingOption.quantity); // TODO: rename quantity to size
+            if (numPackages > 0) {
+                const costForThisOption = numPackages * packagingOption.price;
+                breakdown.push({
+                    packageSize: packagingOption.quantity,
+                    noOfPackages: numPackages,
+                    totalCost: costForThisOption
+                });
+                totalCost += costForThisOption;
+                remainingQuantity -= numPackages * packagingOption.quantity;
+            }
+            if (remainingQuantity === 0) {
+                return {
+                    totalCost,
+                    totalPackages: breakdown.reduce((sum, item) => sum + item.noOfPackages, 0),
+                    packageBreakdown: breakdown
+                };
+            }
         }
         throw new Error('Optimization not fully implemented');
     }
