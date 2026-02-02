@@ -1,5 +1,5 @@
-import type { ProductRepository } from '../repository/ProductRepository.js';
-import type { PackageOptimizer, PackageArrangement } from './PackageOptimizer.js';
+import type { IProductRepository } from '../repository/ProductRepository.js';
+import type { IPackageOptimizer, PackageArrangement } from './PackageOptimizer.js';
 import type { OrderItem } from '../domain/Order.js';
 
 /**
@@ -34,8 +34,8 @@ export interface OrderResult {
  */
 export class OrderService {
   constructor(
-    private productRepository: ProductRepository,
-    private packageOptimizer: PackageOptimizer
+    private productRepository: IProductRepository,
+    private packageOptimizer: IPackageOptimizer
   ) {}
 
   /**

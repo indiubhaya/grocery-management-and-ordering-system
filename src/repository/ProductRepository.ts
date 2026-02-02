@@ -1,6 +1,18 @@
 import { Product } from "../domain/Product.js";
 
-export class ProductRepository {
+/**
+ * Interface for product repository operations to
+ * allow for different implementations (in-memory, database, etc.)
+ */
+export interface IProductRepository {
+  addProduct(product: Product): void;
+  findByCode(code: string): Product | null;
+  updateProduct(product: Product): void;
+  deleteProduct(code: string): void;
+  findAll(): Product[];
+}
+
+export class ProductRepository implements IProductRepository {
   private products: Map<string, Product> = new Map();
 
   addProduct(product: Product) {
