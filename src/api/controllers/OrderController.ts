@@ -4,14 +4,8 @@ import { PackageOptimizer } from '../../services/PackageOptimizer.js';
 import { OrderService } from '../../services/OrderService.js';
 
 export class OrderController {
-  private orderService: OrderService;
 
-  constructor() {
-    const repository = new ProductRepository();
-    repository.seedInitialProducts();
-    const optimizer = new PackageOptimizer();
-    this.orderService = new OrderService(repository, optimizer);
-  }
+  constructor(private orderService: OrderService) {}
 
   processOrder = async (req: Request, res: Response, next: NextFunction) => {
     try {

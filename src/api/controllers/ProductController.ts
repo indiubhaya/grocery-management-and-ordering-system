@@ -3,12 +3,7 @@ import { ProductRepository } from '../../repository/ProductRepository.js';
 import { Product } from '../../domain/Product.js';
 
 export class ProductController {
-  private repository: ProductRepository;
-
-  constructor() {
-    this.repository = new ProductRepository();
-    this.repository.seedInitialProducts();
-  }
+ constructor(private repository: ProductRepository) {}
 
   getAllProducts = async (req: Request, res: Response, next: NextFunction) => {
     try {
