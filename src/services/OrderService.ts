@@ -1,13 +1,6 @@
-import type { ProductRepository } from '..repository/ProductRepository';
-import type { PackageOptimizer, PackageArrangement } from './PackageOptimizer';
-
-/**
- * Input: Item in an order
- */
-export interface OrderItem {
-  productCode: string;
-  quantity: number;
-}
+import type { ProductRepository } from '../repository/ProductRepository.js';
+import type { PackageOptimizer, PackageArrangement } from './PackageOptimizer.js';
+import type { OrderItem } from '../domain/Order.js';
 
 /**
  * Output: Result for a single item in the order

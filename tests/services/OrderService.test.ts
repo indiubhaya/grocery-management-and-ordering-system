@@ -118,6 +118,5 @@ describe('OrderService', () => {
       expect(ssBreakdown?.at(0)?.noOfPackages).toBe(3);
       expect(ssBreakdown?.at(0)?.totalCost).toBeCloseTo(11.95 * 3);
     });
-
   });
 });
