@@ -1,5 +1,7 @@
 # Grocery Management and Ordering System
 
+This is a simple TypeScript backend solution for managing products and optimizing order packaging.
+
 ## Problem
 1. Facilitate product creation, retrieval, deletion, and modification.
 2. Facilitate packaging option introduction, modification, and deletion 
@@ -26,6 +28,21 @@ API will be available at:
 - **Base URL:** http://localhost:3000
 - **API Docs:** http://localhost:3000/api-docs
 - **Health Check:** http://localhost:3000/health
+
+## REST API
+
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/products` | List all products |
+| GET | `/api/products/:code` | Get product by code |
+| POST | `/api/products` | Create new product |
+| PUT | `/api/products/:code` | Update product |
+| DELETE | `/api/products/:code` | Delete product |
+| POST | `/api/orders` | Process order with optimal packaging |
+
+**Full API documentation with examples:** http://localhost:3000/api-docs
+
 
 ### CLI (Alternative)
 ```bash
@@ -57,22 +74,7 @@ TOTAL: $156.60
 PACKAGE COUNT: 8 packages
 ```
 
-## REST API
-
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/products` | List all products |
-| GET | `/api/products/:code` | Get product by code |
-| POST | `/api/products` | Create new product |
-| PUT | `/api/products/:code` | Update product |
-| DELETE | `/api/products/:code` | Delete product |
-| POST | `/api/orders` | Process order with optimal packaging |
-
-**Full API documentation with examples:** http://localhost:3000/api-docs
-
-
-## Available Products
+## Available Products in Seeded Repository
 
 | Code | Product | Unit Price | Packaging Options |
 |------|---------|------------|-------------------|
@@ -86,6 +88,26 @@ PACKAGE COUNT: 8 packages
 
 Test-Driven Development with Domain-Driven Design.
 
+## Architecture
+
+### Layers
+```
+API Layer (Express)
+    ↓
+Service Layer (OrderService, PackageOptimizer)
+    ↓
+Repository Layer (ProductRepository)
+    ↓
+Domain Layer (Product, Order)
+```
+
+### Technology Stack
+- **Runtime:** Node.js 18+
+- **Language:** TypeScript (strict mode)
+- **API Framework:** Express
+- **Testing:** Vitest
+- **Documentation:** Swagger/OpenAPI
+- **Package Manager:** npm
 
 ## Assumptions
 
@@ -112,27 +134,6 @@ Still, the order of six CE would be shipped in three packs as one 5-CE-pack & on
 ## Design Decisions
 
 1. To optimize within a selected timeframe, I have decided to implement and greedy algorithm which does not pick the optimal packaging always but works for the given packaging options in the assessment and would work for most of the real world scenarios. But, this would fail for hypothetical products outside problem statement in which it would sometimes reduce packaging by going for smaller package sizes as demonstrated in below hypothetical scenario.
-
-## Architecture
-
-### Layers
-```
-API Layer (Express)
-    ↓
-Service Layer (OrderService, PackageOptimizer)
-    ↓
-Repository Layer (ProductRepository)
-    ↓
-Domain Layer (Product, Order)
-```
-
-### Technology Stack
-- **Runtime:** Node.js 18+
-- **Language:** TypeScript (strict mode)
-- **API Framework:** Express
-- **Testing:** Vitest
-- **Documentation:** Swagger/OpenAPI
-- **Package Manager:** npm
 
 TestProduct has packaging options are 6, 9, 20
 
