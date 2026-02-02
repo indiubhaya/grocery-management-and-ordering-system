@@ -36,9 +36,9 @@ export class PackageOptimizer {
         if (packagingOptions.length === 0 || orderQuantity < packagingOptions[packagingOptions.length - 1].quantity) {
             const totalCost = product.price * orderQuantity;
             return {
-                totalCost,
+                totalCost: parseFloat(totalCost.toFixed(2)),
                 totalPackages: orderQuantity,
-                packageBreakdown: [{ packageSize: 1, noOfPackages: orderQuantity, totalCost: totalCost }]
+                packageBreakdown: [{ packageSize: 1, noOfPackages: orderQuantity, totalCost: parseFloat(totalCost.toFixed(2)) }]
             };
         }
 

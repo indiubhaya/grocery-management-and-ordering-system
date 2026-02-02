@@ -19,6 +19,7 @@ export interface OrderItemResult {
  */
 export interface OrderResult {
   items: OrderItemResult[];
+  totalPackages: number;
   totalCost: number;
 }
 
@@ -67,7 +68,7 @@ export class OrderService {
         productCode: product.code,
         productName: product.name,
         quantity: item.quantity,
-        totalCost: optimized.totalCost,
+        totalCost: parseFloat(optimized.totalCost.toFixed(2)),
         totalPackages: optimized.totalPackages,
         packageBreakdown: optimized.packageBreakdown
       };
@@ -78,6 +79,7 @@ export class OrderService {
 
     return {
       items: results,
+      totalPackages: results.reduce((sum, item) => sum + item.totalPackages, 0),
       totalCost: parseFloat(totalCost.toFixed(2))
     };
   }
