@@ -12,7 +12,15 @@ export interface PackagingResult {
     packageBreakdown: PackageArrangement[];
 }
 
-export class PackageOptimizer {
+/**
+ * Interface for package optimization strategies.
+ * Allows for different implementations (greedy, dynamic programming, etc.)
+ */
+export interface IPackageOptimizer {
+    optimize(product: Product, orderQuantity: number): PackagingResult;
+}
+
+export class PackageOptimizer implements IPackageOptimizer {
 
     optimize(product: Product, orderQuantity: number): PackagingResult {
         // Negative quantities are handled here
