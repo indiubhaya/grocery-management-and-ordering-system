@@ -2,9 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJsdoc from 'swagger-jsdoc';
-import { ProductRepository } from '../repository/ProductRepository.js';
-import { PackageOptimizer } from '../services/PackageOptimizer.js';
-import { OrderService } from '../services/OrderService.js';
+// @ts-ignore
+import { repository, orderService } from './shared.js';
 import { OrderController } from './controllers/OrderController.js';
 import { ProductController } from './controllers/ProductController.js';
 import { ErrorHandler } from './middleware/ErrorHandler.js';
@@ -32,16 +31,11 @@ const swaggerOptions = {
       },
     ],
   },
-  apis: ['./src/api/Server.ts'],
+  apis: ['./src/api/routes/*.ts'],
 };
 
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
-const repository = new ProductRepository();
-repository.seedInitialProducts();
-const optimizer = new PackageOptimizer();
-const orderService = new OrderService(repository, optimizer);
 
 const orderController = new OrderController(orderService);
 const productController = new ProductController(repository);

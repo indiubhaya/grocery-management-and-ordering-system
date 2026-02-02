@@ -27,7 +27,7 @@ export class ProductRepository implements IProductRepository {
    * Find product by code.
    */
   findByCode(code: string) {
-    return this.products.get(code) || null; // todo shallow copy
+    return this.products.get(code) || null;
   }
 
    /**

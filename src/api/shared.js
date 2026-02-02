@@ -5,7 +5,7 @@ import { OrderService } from '../services/OrderService.js';
 /**
  * Shared instances for dependency injection.
  * 
- * This module creates and exports singleton instances of the
+ * This creates and exports singleton instances of the
  * ProductRepository, PackageOptimizer, and OrderService.
  * 
  * Other modules can import these instances to ensure a

@@ -56,7 +56,7 @@ export class PackageOptimizer implements IPackageOptimizer {
 
         for (let i = 0; i < packagingOptions.length; i++) {
             const packagingOption = packagingOptions[i];
-            const numPackages = Math.floor(remainingQuantity / packagingOption.quantity); // TODO: rename quantity to size
+            const numPackages = Math.floor(remainingQuantity / packagingOption.quantity);
             if (numPackages > 0) {
                 const costForThisOption = numPackages * packagingOption.price;
                 breakdown.push({
