@@ -1,8 +1,10 @@
 import { Router } from 'express';
 import { OrderController } from '../controllers/OrderController.js';
+// @ts-ignore
+import { orderService } from '../shared.js';
 
 const router = Router();
-const controller = new OrderController();
+const controller = new OrderController(orderService);
 
 /**
  * @swagger
