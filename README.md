@@ -59,167 +59,18 @@ PACKAGE COUNT: 8 packages
 
 ## REST API
 
-### Endpoints
 
-#### Process Order
-**POST** `/api/orders`
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/products` | List all products |
+| GET | `/api/products/:code` | Get product by code |
+| POST | `/api/products` | Create new product |
+| PUT | `/api/products/:code` | Update product |
+| DELETE | `/api/products/:code` | Delete product |
+| POST | `/api/orders` | Process order with optimal packaging |
 
-Process a grocery order with optimal packaging.
+**Full API documentation with examples:** http://localhost:3000/api-docs
 
-**Request:**
-```json
-{
-  "items": [
-    {"productCode": "CE", "quantity": 10},
-    {"productCode": "HM", "quantity": 14},
-    {"productCode": "SS", "quantity": 3}
-  ]
-}
-```
-
-**Response (200 OK):**
-```json
-{
-  "items": [
-    {
-      "productCode": "CE",
-      "productName": "Cheese",
-      "quantity": 10,
-      "totalCost": 41.90,
-      "totalPackages": 2,
-      "packageBreakdown": [
-        {
-          "packageSize": 5,
-          "noOfPackages": 2,
-          "totalCost": 41.90
-        }
-      ]
-    },
-    {
-      "productCode": "HM",
-      "productName": "Ham",
-      "quantity": 14,
-      "totalCost": 78.85,
-      "totalPackages": 3,
-      "packageBreakdown": [
-        {"packageSize": 8, "noOfPackages": 1, "totalCost": 40.95},
-        {"packageSize": 5, "noOfPackages": 1, "totalCost": 29.95},
-        {"packageSize": 1, "noOfPackages": 1, "totalCost": 7.95}
-      ]
-    },
-    {
-      "productCode": "SS",
-      "productName": "Soy Sauce",
-      "quantity": 3,
-      "totalCost": 35.85,
-      "totalPackages": 3,
-      "packageBreakdown": [
-        {"packageSize": 1, "noOfPackages": 3, "totalCost": 35.85}
-      ]
-    }
-  ],
-  "totalCost": 156.60
-}
-```
-
-**Error Response (400):**
-```json
-{
-  "error": "Product INVALID not found"
-}
-```
-
-**curl Example:**
-```bash
-curl -X POST http://localhost:3000/api/orders \
-  -H "Content-Type: application/json" \
-  -d '{
-    "items": [
-      {"productCode": "CE", "quantity": 10},
-      {"productCode": "HM", "quantity": 14},
-      {"productCode": "SS", "quantity": 3}
-    ]
-  }' | python -m json.tool
-```
-
----
-
-#### Get All Products
-**GET** `/api/products`
-
-List all available products with pricing.
-
-**Response (200 OK):**
-```json
-{
-  "products": [
-    {
-      "code": "CE",
-      "name": "Cheese",
-      "price": 5.95,
-      "packagingOptions": [
-        {"quantity": 3, "price": 14.95},
-        {"quantity": 5, "price": 20.95}
-      ]
-    },
-    {
-      "code": "HM",
-      "name": "Ham",
-      "price": 7.95,
-      "packagingOptions": [
-        {"quantity": 2, "price": 13.95},
-        {"quantity": 5, "price": 29.95},
-        {"quantity": 8, "price": 40.95}
-      ]
-    },
-    {
-      "code": "SS",
-      "name": "Soy Sauce",
-      "price": 11.95,
-      "packagingOptions": []
-    }
-  ]
-}
-```
-
-**curl Example:**
-```bash
-curl http://localhost:3000/api/products
-```
-
----
-
-#### Get Product by Code
-**GET** `/api/products/:code`
-
-Get details of a specific product.
-
-**Response (200 OK):**
-```json
-{
-  "code": "CE",
-  "name": "Cheese",
-  "price": 5.95,
-  "packagingOptions": [
-    {"quantity": 3, "price": 14.95},
-    {"quantity": 5, "price": 20.95}
-  ]
-}
-```
-
-**Response (404 Not Found):**
-```json
-{
-  "error": "Product CE not found"
-}
-```
-
-**curl Example:**
-```bash
-curl http://localhost:3000/api/products/CE | python -m json.tool
-```
-
----
 
 ## Available Products
 
@@ -239,7 +90,7 @@ Test-Driven Development with Domain-Driven Design.
 ## Assumptions
 
 1. In-memory storage sufficient for this assessment scope and no database required
-2. Product catalog is pre-seeded (CE, HM, SS) to support efficient testing
+2. Product catalog is pre-seeded (CE, HM, SS) to support efficient testing. But product create, update, delete end points are given to alter the product repository.
 3. The shop does not ship more than requested items even if the total cost is reduced by doing so.
 4. The shop would choose to use larger package sizes over smaller sizes of there is more than one way to pack if the minimum number of package requirement is satisfied.
 e.g. 

@@ -13,34 +13,6 @@ const controller = new ProductController();
  *     responses:
  *       200:
  *         description: List of products
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 products:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       code:
- *                         type: string
- *                       name:
- *                         type: string
- *                       price:
- *                         type: number
- *                       packagingOptions:
- *                         type: array
- *             example:
- *               products:
- *                 - code: "CE"
- *                   name: "Cheese"
- *                   price: 5.95
- *                   packagingOptions:
- *                     - quantity: 3
- *                       price: 14.95
- *                     - quantity: 5
- *                       price: 20.95
  */
 router.get('/', controller.getAllProducts);
 
@@ -56,8 +28,6 @@ router.get('/', controller.getAllProducts);
  *         required: true
  *         schema:
  *           type: string
- *         description: Product code
- *         example: "CE"
  *     responses:
  *       200:
  *         description: Product details
@@ -65,5 +35,107 @@ router.get('/', controller.getAllProducts);
  *         description: Product not found
  */
 router.get('/:code', controller.getProductByCode);
+
+/**
+ * @swagger
+ * /api/products:
+ *   post:
+ *     summary: Create a new product
+ *     description: Add a new product to the catalog
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - code
+ *               - name
+ *               - price
+ *             properties:
+ *               code:
+ *                 type: string
+ *                 example: "BR"
+ *               name:
+ *                 type: string
+ *                 example: "Bread"
+ *               price:
+ *                 type: number
+ *                 example: 3.95
+ *               packagingOptions:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     quantity:
+ *                       type: integer
+ *                     price:
+ *                       type: number
+ *                 example:
+ *                   - quantity: 6
+ *                     price: 20.00
+ *     responses:
+ *       201:
+ *         description: Product created successfully
+ *       400:
+ *         description: Invalid input or product already exists
+ */
+router.post('/', controller.createProduct);
+
+/**
+ * @swagger
+ * /api/products/{code}:
+ *   put:
+ *     summary: Update an existing product
+ *     description: Update product details and pricing
+ *     parameters:
+ *       - in: path
+ *         name: code
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - price
+ *             properties:
+ *               name:
+ *                 type: string
+ *               price:
+ *                 type: number
+ *               packagingOptions:
+ *                 type: array
+ *     responses:
+ *       200:
+ *         description: Product updated successfully
+ *       404:
+ *         description: Product not found
+ */
+router.put('/:code', controller.updateProduct);
+
+/**
+ * @swagger
+ * /api/products/{code}:
+ *   delete:
+ *     summary: Delete a product
+ *     description: Remove a product from the catalog
+ *     parameters:
+ *       - in: path
+ *         name: code
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       204:
+ *         description: Product deleted successfully
+ *       404:
+ *         description: Product not found
+ */
+router.delete('/:code', controller.deleteProduct);
 
 export { router as productRouter };
