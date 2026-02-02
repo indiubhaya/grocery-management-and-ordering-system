@@ -116,4 +116,32 @@ describe('PackageOptimizer', () => {
     expect(order?.packageBreakdown).toContainEqual({ packageSize: 5, noOfPackages: 1, totalCost: 29.95 });
     expect(order?.packageBreakdown).toContainEqual({ packageSize: 2, noOfPackages: 1, totalCost: 13.95 });
   });
+  // Possible optimization for edge case after MVP
+  describe('Dynamic Programming Optimization', () => {
+    it.skip('should find optimal solution example 1 - an improvement to MVP', () => {
+      const product = new Product('TEST', 'Test Product', 1.95);
+      product.addPackagingOption(6, 6.95);
+      product.addPackagingOption(9, 9.95);
+
+      const order = optimizer.optimize(product, 12);
+
+      // Greedy algorithm output: 1×9 + 3×1 = 4 packages
+      // Optimal algorithm output: 2×6 = 2 packages
+      expect(order.totalPackages).toBe(2);
+      expect(order.packageBreakdown.find(p => p.packageSize === 6)?.noOfPackages).toBe(2);
+    });
+
+    it.skip('should find optimal solution example 2 - an improvement to MVP', () => {
+      const product = new Product('TEST', 'Test Product', 1.95);
+      product.addPackagingOption(3, 3.95);
+      product.addPackagingOption(5, 5.95);
+      product.addPackagingOption(8, 8.95);
+
+      const order = optimizer.optimize(product, 10);
+
+      // Optimal algorithm output: 2×5 = 2 packages
+      // Greedy algorithm output: 1×8 + 2×1 = 3 packages)
+      expect(order.totalPackages).toBe(2);
+    });
+  });
 });
