@@ -2,12 +2,17 @@ import express from 'express';
 import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJsdoc from 'swagger-jsdoc';
+import path from 'path';
+import { fileURLToPath } from 'url';
 // @ts-ignore
 import { repository, orderService } from './shared.js';
 import { OrderController } from './controllers/OrderController.js';
 import { ProductController } from './controllers/ProductController.js';
 import { ErrorHandler } from './middleware/ErrorHandler.js';
 import { Router } from 'express';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 
@@ -31,7 +36,7 @@ const swaggerOptions = {
       },
     ],
   },
-  apis: ['./src/api/routes/*.ts'],
+  apis: [path.join(__dirname, 'routes', '*.ts')],
 };
 
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
